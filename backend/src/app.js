@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoute from "./routing/auth.route.js";
+import gitRoute from "./routing/github.route.js";
 import { errorHandler } from "./utils/errorHandler.js";
 import cookieParser from "cookie-parser";
 dotenv.config();
@@ -15,5 +16,5 @@ app.use(errorHandler);
 app.use(cookieParser());
 
 app.use("/api/auth", authRoute);
-
+app.use("/api/git", gitRoute);
 export default app;
