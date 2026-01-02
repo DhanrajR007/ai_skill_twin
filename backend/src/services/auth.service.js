@@ -1,7 +1,12 @@
 import { isUserExist } from "../dao/user.dao.js";
 import User from "../model/user.model.js";
-import { ConflictError } from "../utils/errorHandler.js";
-import { bcryptPassword, generateToken, getAvatar } from "../utils/helper.js";
+import { BadRequestError, ConflictError } from "../utils/errorHandler.js";
+import {
+  bcryptPassword,
+  comparePassword,
+  generateToken,
+  getAvatar,
+} from "../utils/helper.js";
 
 export const registerService = async (name, email, password) => {
   try {
@@ -21,6 +26,23 @@ export const registerService = async (name, email, password) => {
 
     const token = generateToken(user);
 
+    return { user, token };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const loginService = async (email, password) => {
+  try {
+    const user = await isUserExist(email);
+    if (!user) {
+      throw new BadRequestError("Invalid Credentials");
+    }
+    const isPasswordValid = comparePassword(password, user.password);
+    if (!isPasswordValid) {
+      throw new BadRequestError("Invalid Credentials");
+    }
+    const token = generateToken(user);
     return { user, token };
   } catch (error) {
     throw new Error(error);
