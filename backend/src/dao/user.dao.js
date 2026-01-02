@@ -8,3 +8,12 @@ export const isUserExist = async (email) => {
     throw new Error(error);
   }
 };
+
+export const getUserById = async (id) => {
+  try {
+    const user = await User.findById(id);
+    return user;
+  } catch (error) {
+    throw new Error(error);
+  }
+};

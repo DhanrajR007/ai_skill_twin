@@ -4,6 +4,8 @@ export const registerController = async (req, res) => {
   const { name, email, password } = req.body;
   try {
     const { user, token } = await registerService(name, email, password);
+    req.user = user;
+    res.cookie("accessToken", token);
     res.status(201).json({
       user,
       token,
@@ -22,6 +24,8 @@ export const loginController = async (req, res) => {
   const { email, password } = req.body;
   try {
     const { user, token } = await loginService(email, password);
+    req.user = user;
+    res.cookie("accessToken", token);
     res.status(200).json({
       user,
       token,
