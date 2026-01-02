@@ -1,7 +1,7 @@
 import { isUserExist } from "../dao/user.dao.js";
 import User from "../model/user.model.js";
-import { ConflictError } from "../utils/errorHandler";
-import { bcryptPassword } from "../utils/helper.js";
+import { ConflictError } from "../utils/errorHandler.js";
+import { bcryptPassword, generateToken, getAvatar } from "../utils/helper.js";
 
 export const registerService = async (name, email, password) => {
   try {
@@ -10,14 +10,18 @@ export const registerService = async (name, email, password) => {
       throw new ConflictError("User already exists");
     }
     const hashedPassword = bcryptPassword(password);
+    const avatar = getAvatar(email);
 
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
+      avatar: avatar,
     });
 
-    return user;
+    const token = generateToken(user);
+
+    return { user, token };
   } catch (error) {
     throw new Error(error);
   }

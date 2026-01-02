@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import config from "../config/config.js";
+import md5 from "md5";
 
 export const getAvatar = (email) => {
   const hash = md5(email.trim().toLowerCase());
